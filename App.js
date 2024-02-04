@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { TextInput, Text, Switch } from 'react-native';
+import LoginScreen from './app/screens/LoginScreen';
 // import { View } from 'react-native';
 
 // import AppText from './app/components/AppText';
@@ -11,12 +13,15 @@ import React from 'react';
 
 // import Icon from './app/components/Icon';
 // import Screen from './app/components/Screen';
+// import AppTextInput from './app/components/AppTextInput';
+// import AppPicker from './app/components/AppPicker';
+// import AppTextInput from './app/components/AppTextInput';
 // import ListItem from './app/components/ListItem';
 // import Icon from './app/components/Icon';
 
 // import AccountScreen from './app/screens/AccountScreen';
-import ListingsScreen from './app/screens/ListingsScreen';
+// import ListingsScreen from './app/screens/ListingsScreen';
 
 export default function App() {
-  return <ListingsScreen />;
+  return <LoginScreen />;
 }
