@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from "react";
 import ListingEditScreen from "./app/screens/ListingEditScreen";
 
@@ -48,6 +49,14 @@ export default function App() {
     </Screen>
   );
 >>>>>>> c398087 (Update dependencies and fix button component)
+=======
+import React from 'react';
+
+import WelcomeScreen from './app/screens/WelcomeScreen';
+
+export default function App() {
+  return <WelcomeScreen />;
+>>>>>>> 20e8f2c (Fix bug in login functionality)
 =======
 import React from 'react';
 
