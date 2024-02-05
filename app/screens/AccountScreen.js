@@ -1,45 +1,43 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React from "react";
+import { StyleSheet, View, FlatList } from "react-native";
 
-import Screen from '../components/Screen';
-import ListItem from '../components/ListItem';
-
-import colors from '../config/colors';
-import Icon from '../components/Icon';
-import ListItemSeparatorComponent from '../components/ListItemSeparator';
+import { ListItem, ListItemSeparator } from "../components/lists";
+import colors from "../config/colors";
+import Icon from "../components/Icon";
+import Screen from "../components/Screen";
 
 const menuItems = [
   {
-    title: 'My Listings',
+    title: "My Listings",
     icon: {
-      name: 'format-list-bulleted',
+      name: "format-list-bulleted",
       backgroundColor: colors.primary,
     },
   },
   {
-    title: 'My Messages',
+    title: "My Messages",
     icon: {
-      name: 'email',
+      name: "email",
       backgroundColor: colors.secondary,
     },
   },
 ];
 
-const AccountScreen = () => {
+function AccountScreen(props) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
           title="Mosh Hamedani"
-          subTitle="programingwithmosh@gmail.com"
-          image={require('../assets/mosh.jpg')}
+          subTitle="programmingwithmosh@gmail.com"
+          image={require("../assets/mosh.jpg")}
         />
       </View>
       <View style={styles.container}>
         <FlatList
           data={menuItems}
           keyExtractor={(menuItem) => menuItem.title}
-          ItemSeparatorComponent={ListItemSeparatorComponent}
+          ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (
             <ListItem
               title={item.title}
@@ -59,15 +57,15 @@ const AccountScreen = () => {
       />
     </Screen>
   );
-};
-
-export default AccountScreen;
+}
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 20,
-  },
   screen: {
     backgroundColor: colors.light,
   },
+  container: {
+    marginVertical: 20,
+  },
 });
+
+export default AccountScreen;
