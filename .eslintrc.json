@@ -10,6 +10,8 @@
   "rules": {
     //disable rule of space before function parentheses
     "space-before-function-paren": 0,
-    "comma-dangle": 0
-  }
+    "comma-dangle": 0,
+    "sort-keys-fix/sort-keys-fix": "warn" // or "error" if you want it to be treated as an error
+  },
+  "plugins": ["sort-keys-fix"]
 }
