@@ -1,42 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Text } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import Screen from './app/components/Screen';
-import * as ImagePicker from 'expo-image-picker';
-import AppButton from './app/components/AppButton'; // Asegúrate de que este componente personalizado maneje correctamente la prop 'title'
-import { Image } from 'react-native';
+import { Button } from 'react-native';
 
-export default function App() {
-  const [imageUri, setImageUri] = useState(null); // Inicializar con null para claridad
-
-  useEffect(() => {
-    const requestPermission = async () => {
-      // Usar el nuevo método para solicitar permisos
-      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-      if (status !== 'granted') {
-        alert('You need to enable permissions to access the photo library.');
-      }
-    };
-    console.log('useEffect');
-    // requestPermission();
-  }, []);
-
-  const selectImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync();
-      if (!result.cancelled) {
-        setImageUri(result.uri);
-        console.log(result.uri);
-      }
-    } catch (error) {
-      console.log('Error reading an image', error);
-    }
-  };
-
+const Tweets = ({ navigation }) => {
   return (
     <Screen>
-      <AppButton title="Select Image" onPress={selectImage} />
-      {imageUri && (
-        <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
-      )}
+      <Text>Tweets</Text>
+      <Button
+        title="View Tweet"
+        onPress={() => navigation.navigate('TweetDetails')}
+      />
     </Screen>
+  );
+};
+
+const TweetDetails = () => {
+  return (
+    <Screen>
+      <Text>Tweet Details</Text>
+    </Screen>
+  );
+};
+
+const Stack = createStackNavigator();
+
+const StackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Tweets" component={Tweets} />
+    <Stack.Screen name="TweetDetails" component={TweetDetails} />
+  </Stack.Navigator>
+);
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <StackNavigator />
+    </NavigationContainer>
   );
 }
