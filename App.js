@@ -6,6 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Screen from './app/components/Screen';
 import { Button } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AuthNavigator from './app/navigation/AuthNavigator';
+import navigationTheme from './app/navigation/navigationTheme';
+import AppNavigator from './app/navigation/AppNavigator';
+import AccountNavigator from './app/navigation/AccountNavigator';
 
 const Tweets = ({ navigation }) => {
   return (
@@ -80,15 +84,15 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen name="Account" component={Account} />
+      <Tab.Screen name="Account" component={AccountNavigator} />
     </Tab.Navigator>
   );
 };
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <TabNavigator />
+    <NavigationContainer theme={navigationTheme}>
+      <AppNavigator />
     </NavigationContainer>
   );
 }
