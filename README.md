@@ -25,3 +25,13 @@ This is a mobile app that allows users to sell items they no longer need.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+    npm i react-native-gesture-handler react-native-reanimated react-native-safe-area-context react-native-screens react-native-web
+
+    npm i @react-navigation/native @react-navigation/stack @react-native-community/masked-view
+
+    npm i expo expo-constants expo-image-picker expo-location expo-permissions
+
+    npm i formik yup
+
+    npm i -D @babel/core babel-preset-expo
