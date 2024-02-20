@@ -56,7 +56,14 @@ import { Button } from 'react-native';
 >>>>>>> 4f502d7 (Add dependencies and update navigation in package.json and App.js)
 =======
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+<<<<<<< HEAD
 >>>>>>> 659dbd4 (Update dependencies and navigation structure)
+=======
+import AuthNavigator from './app/navigation/AuthNavigator';
+import navigationTheme from './app/navigation/navigationTheme';
+import AppNavigator from './app/navigation/AppNavigator';
+import AccountNavigator from './app/navigation/AccountNavigator';
+>>>>>>> ef1c112 (Refactor navigation and update screen components)
 
 const Tweets = ({ navigation }) => {
   return (
@@ -188,15 +195,15 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen name="Account" component={Account} />
+      <Tab.Screen name="Account" component={AccountNavigator} />
     </Tab.Navigator>
   );
 };
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <TabNavigator />
+    <NavigationContainer theme={navigationTheme}>
+      <AppNavigator />
     </NavigationContainer>
   );
 >>>>>>> 4f502d7 (Add dependencies and update navigation in package.json and App.js)
