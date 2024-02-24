@@ -23,6 +23,7 @@ const addListing = (listing, onUploadProgress) => {
     data.append('location', JSON.stringify(listing.location));
 
   return client.post(endpoint, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
     onUploadProgress: (progress) =>
       onUploadProgress(progress.loaded / progress.total),
   });

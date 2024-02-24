@@ -27,7 +27,7 @@ function ImageInput({ imageUri, onChangeImage }) {
 
   const requestPermission = async () => {
     // Usar el nuevo método para solicitar permisos
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
       alert('You need to enable permissions to access the photo library.');
     }
