@@ -9,13 +9,26 @@ import {
   SubmitButton,
   ErrorMessage,
 } from '../components/forms';
-import { jwtDecode } from 'jwt-decode';
 import authApi from '../api/auth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
   password: Yup.string().required().min(4).label('Password'),
 });
+
+const decodeJwt = (token) => {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
+  return JSON.parse(jsonPayload);
+};
 
 function LoginScreen(props) {
   const [loginFailed, setLoginFailed] = useState(false);
@@ -25,8 +38,8 @@ function LoginScreen(props) {
       return setLoginFailed(true);
     }
     setLoginFailed(false);
-    const user = jwtDecode(result.data);
     console.log(result.data);
+    const user = decodeJwt(result.data);
     console.log(user);
   };
 
