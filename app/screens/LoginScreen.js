@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import * as Yup from 'yup';
+import { decode as atob } from 'base-64';
 
 import Screen from '../components/Screen';
 import {
@@ -10,7 +11,7 @@ import {
   ErrorMessage,
 } from '../components/forms';
 import authApi from '../api/auth';
-
+import AuthContext from '../auth/context';
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
   password: Yup.string().required().min(4).label('Password'),
@@ -32,6 +33,8 @@ const decodeJwt = (token) => {
 
 function LoginScreen(props) {
   const [loginFailed, setLoginFailed] = useState(false);
+  const authContext = useContext(AuthContext);
+
   const handleSubtmit = async ({ email, password }) => {
     const result = await authApi.login(email, password);
     if (!result.ok) {
@@ -41,6 +44,7 @@ function LoginScreen(props) {
     console.log(result.data);
     const user = decodeJwt(result.data);
     console.log(user);
+    authContext.setUser(user);
   };
 
   return (
