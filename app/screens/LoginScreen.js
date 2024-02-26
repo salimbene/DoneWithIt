@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import * as Yup from 'yup';
-import { decode as atob } from 'base-64';
-
+import { decodeJwt } from '../utility/decode';
 import Screen from '../components/Screen';
 import {
   Form,
@@ -12,24 +11,11 @@ import {
 } from '../components/forms';
 import authApi from '../api/auth';
 import AuthContext from '../auth/context';
+import authStorage from '../auth/storage';
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
   password: Yup.string().required().min(4).label('Password'),
 });
-
-const decodeJwt = (token) => {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
-  return JSON.parse(jsonPayload);
-};
 
 function LoginScreen(props) {
   const [loginFailed, setLoginFailed] = useState(false);
@@ -45,6 +31,7 @@ function LoginScreen(props) {
     const user = decodeJwt(result.data);
     console.log(user);
     authContext.setUser(user);
+    authStorage.storeToken(result.data);
   };
 
   return (
