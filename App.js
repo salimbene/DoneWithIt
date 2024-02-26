@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import AppLoading from 'expo-app-loading';
+
 import navigationTheme from './app/navigation/navigationTheme';
 import AppNavigator from './app/navigation/AppNavigator';
 import OfflineNotice from './app/components/OfflineNotice';
 import AuthNavigator from './app/navigation/AuthNavigator';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
-import { decodeJwt } from './app/utility/decode';
-import AppLoading from 'expo-app-loading';
+
 // import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
-  const restoreToken = async () => {
-    const token = await authStorage.getToken();
-    if (!token) return;
-    setUser(decodeJwt(token));
+  const restoreUser = async () => {
+    const user = await authStorage.getUser();
+    if (!user) return;
+    setUser(user);
   };
 
   // useEffect(() => {
@@ -55,7 +56,7 @@ export default function App() {
   if (!isReady) {
     return (
       <AppLoading
-        startAsync={restoreToken}
+        startAsync={restoreUser}
         onFinish={() => setIsReady(true)}
         onError={console.warn}
       />
