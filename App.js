@@ -7,18 +7,60 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
 import { decodeJwt } from './app/utility/decode';
+import AppLoading from 'expo-app-loading';
+// import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
   const [user, setUser] = useState();
+  const [isReady, setIsReady] = useState(false);
 
   const restoreToken = async () => {
     const token = await authStorage.getToken();
     if (!token) return;
     setUser(decodeJwt(token));
   };
-  useEffect(() => {
-    restoreToken();
-  });
+
+  // useEffect(() => {
+  //   async function prepare() {
+  //     try {
+  //       // Keep the splash screen visible while fetching resources
+  //       await SplashScreen.preventAutoHideAsync();
+  //       await restoreToken();
+  //     } catch (e) {
+  //       console.warn(e);
+  //     } finally {
+  //       // Tell the application to render
+  //       setIsReady(true);
+  //     }
+  //   }
+
+  //   prepare();
+  // }, []);
+
+  // if (!isReady) {
+  //   return null;
+  // }
+
+  // Hide the splash screen once the app is ready
+  // useEffect(() => {
+  //   async function hideSplash() {
+  //     await SplashScreen.hideAsync();
+  //   }
+
+  //   if (isReady) {
+  //     hideSplash();
+  //   }
+  // }, [isReady]);
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={restoreToken}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
