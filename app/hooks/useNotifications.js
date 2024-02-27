@@ -34,7 +34,7 @@ export default useNotifications = (notificationListener) => {
         })
       ).data;
       expoPushTokens.register(token);
-      console.log(token);
+      console.log({ token });
     } catch (error) {
       console.log('Error getting a push token', error);
     }
