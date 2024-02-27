@@ -9,6 +9,7 @@ import useAuth from '../auth/useAuth';
 import useApi from '../hooks/useApi';
 import authApi from '../api/auth';
 import ActivityIndicator from '../components/ActivityIndicator';
+import ErrorMessage from '../components/forms/ErrorMessage';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label('Name'),
@@ -21,31 +22,32 @@ function RegisterScreen() {
   const loginApi = useApi(authApi.login);
   const auth = useAuth();
   const [error, setError] = useState();
+  const [registerFailed, setRegisterFailed] = useState(false);
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
-
     if (!result.ok) {
       if (result.data) {
-        console.log(result.data);
         setError(result.data.error);
       } else {
         setError('An unexpected error occurred.');
-        console.log(result);
       }
-      return;
+      return setRegisterFailed(true);
     }
+    setRegisterFailed(false);
 
-    const { data: authToken } = loginApi.request(
+    const { data: authToken } = await loginApi.request(
       userInfo.email,
       userInfo.password
     );
+
     auth.logIn(authToken);
   };
 
   return (
     <Screen style={styles.container}>
       <ActivityIndicator visible={registerApi.loading || loginApi.loading} />
+      <ErrorMessage error={error} visible={registerFailed} />
       <Form
         initialValues={{ name: '', email: '', password: '' }}
         onSubmit={handleSubmit}
