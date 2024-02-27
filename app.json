@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
+    "projectId": "done-with-it",
     "splash": {
       "image": "./app/assets/splash.png",
       "resizeMode": "cover",
@@ -19,6 +20,11 @@
       "supportsTablet": true
     },
     "description": "A marketplace for selling the stuff you don't need anymore.",
-    "plugins": ["expo-secure-store"]
+    "plugins": ["expo-secure-store"],
+    "extra": {
+      "eas": {
+        "projectId": "e60646dd-94e4-4e3c-a5a9-2e8f39a89716"
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppLoading from 'expo-app-loading';
 
+import { View } from 'react-native';
 import navigationTheme from './app/navigation/navigationTheme';
 import AppNavigator from './app/navigation/AppNavigator';
 import OfflineNotice from './app/components/OfflineNotice';
@@ -9,11 +9,16 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
 
-// import * as SplashScreen from 'expo-splash-screen';
+import Entypo from '@expo/vector-icons/Entypo';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
 
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
+
+  // Keep the splash screen visible while we fetch resources
+  SplashScreen.preventAutoHideAsync();
 
   const restoreUser = async () => {
     const user = await authStorage.getUser();
@@ -21,45 +26,44 @@ export default function App() {
     setUser(user);
   };
 
-  // useEffect(() => {
-  //   async function prepare() {
-  //     try {
-  //       // Keep the splash screen visible while fetching resources
-  //       await SplashScreen.preventAutoHideAsync();
-  //       await restoreToken();
-  //     } catch (e) {
-  //       console.warn(e);
-  //     } finally {
-  //       // Tell the application to render
-  //       setIsReady(true);
-  //     }
-  //   }
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Keep the splash screen visible while fetching resources
+        // Pre-load fonts, make any API calls you need to do here
+        await Font.loadAsync(Entypo.font);
+        await restoreUser();
+        // Artificially delay for two seconds to simulate a slow loading
+        // experience. Please remove this if you copy and paste the code!
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setIsReady(true);
+      }
+    }
 
-  //   prepare();
-  // }, []);
+    prepare();
+  }, []);
 
-  // if (!isReady) {
-  //   return null;
-  // }
-
-  // Hide the splash screen once the app is ready
-  // useEffect(() => {
-  //   async function hideSplash() {
-  //     await SplashScreen.hideAsync();
-  //   }
-
-  //   if (isReady) {
-  //     hideSplash();
-  //   }
-  // }, [isReady]);
+  const onLayoutRootView = useCallback(async () => {
+    if (isReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `isReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [isReady]);
 
   if (!isReady) {
     return (
-      <AppLoading
-        startAsync={restoreUser}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
+      <View
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        onLayout={onLayoutRootView}
+      ></View>
     );
   }
 
@@ -72,90 +76,3 @@ export default function App() {
     </AuthContext.Provider>
   );
 }
-
-// import { Text } from 'react-native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import Screen from './app/components/Screen';
-// import { Button } from 'react-native';
-// import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-// import AccountNavigator from './app/navigation/AccountNavigator';
-
-// const Tweets = ({ navigation }) => {
-//   return (
-//     <Screen>
-//       <Text>Tweets</Text>
-//       <Button
-//         title="View Tweet"
-//         onPress={() =>
-//           navigation.navigate('TweetDetails', {
-//             id: 1,
-//           })
-//         }
-//       />
-//     </Screen>
-//   );
-// };
-
-// const TweetDetails = ({ route }) => {
-//   return (
-//     <Screen>
-//       <Text>Tweet Details {route.params.id}</Text>
-//     </Screen>
-//   );
-// };
-
-// const Stack = createStackNavigator();
-
-// const Tab = createBottomTabNavigator();
-
-// const FeedNavigator = () => (
-//   <Stack.Navigator
-//     screenOptions={{ headerStyle: { backgroundColor: 'dodgerblue' } }}
-//   >
-//     <Stack.Screen name="Tweets" component={Tweets} />
-//     <Stack.Screen
-//       name="TweetDetails"
-//       component={TweetDetails}
-//       // options={({ route }) => ({ title: route.params.id })}
-//       options={{
-//         headerStyle: { backgroundColor: 'tomato' },
-//         headerTintColor: 'white',
-//         // headerShown: false,
-//       }}
-//     />
-//   </Stack.Navigator>
-// );
-
-// const Account = () => {
-//   return (
-//     <Screen>
-//       <Text>Account</Text>
-//     </Screen>
-//   );
-// };
-
-// const TabNavigator = () => {
-//   return (
-//     <Tab.Navigator
-//     // tabBarOptions={{
-//     //   activeBackgroundColor: 'tomato',
-//     //   activeTintColor: 'white',
-//     //   inactiveBackgroundColor: '#eee',
-//     //   inactiveTintColor: 'black',
-//     // }}
-//     >
-//       <Tab.Screen
-//         name="Feed"
-//         component={FeedNavigator}
-//         options={{
-//           tabBarIcon: ({ size, color }) => (
-//             <MaterialCommunityIcons name="home" size={size} color={color} />
-//           ),
-//         }}
-//       />
-//       <Tab.Screen name="Account" component={AccountNavigator} />
-//     </Tab.Navigator>
-//   );
-// };
